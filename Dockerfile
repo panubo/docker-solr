@@ -7,16 +7,17 @@
 FROM centos:centos7
 MAINTAINER Tim Robinson <tim@voltgrid.com>
 
+ENV SOLR_VERSION=4.10.4
+
 RUN \
   yum -q -y install epel-release && \
   yum -q -y install tar wget java-1.7.0-openjdk-headless && \
-  yum -q -y clean all
-
-ENV SOLR_VERSION 4.10.4
+  yum -q -y clean all && \
+  rm -rf /tmp/* /var/cache/yum/
 
 RUN groupadd solr --gid 48 && \
   useradd solr --uid 48 --gid 48 -M -d /opt/solr && \
-  wget -qO- http://apache.mirror.serversaustralia.com.au/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz | tar -C /opt -zx && \
+  wget -qO- https://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz | tar -C /opt -zx && \
   cp -a /opt/solr-${SOLR_VERSION}/example/. /opt/solr && \
   cp -a /opt/solr-${SOLR_VERSION}/contrib /opt/solr && \
   cp -a /opt/solr-${SOLR_VERSION}/dist /opt/solr && \
